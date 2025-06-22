@@ -23,6 +23,7 @@
 
         <div class="navbar-menu">
           <div class="navbar-end">
+            <a href="{% url 'submit' %}" class="navbar-item"><strong>Submit</strong></a>
             <div class="navbar-item">
                 <div class="buttons">
                 {% if user.is_authenticated %}
@@ -42,7 +43,7 @@
                   <strong>Log in</strong>
                   </a>
 
-                  
+
                 {% endif %}
                 </div>
             </div>
