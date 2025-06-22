@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
@@ -5,9 +6,15 @@ from .forms import StoryForm
 from .models import Story
 # Create your views here.
 def frontpage(request):
-    return render(request, 'story/frontpage.html')
+    date_form = datetime.datetime.now() - datetime.timedelta(days=1)
+
+    stories = Story.objects.filter(created_at__gte=date_form).order_by('-number_of_votes')[0:30]
+    return render(request, 'story/frontpage.html', {'stories': stories})
 
 
+def newest(request):
+    stories = Story.objects.all()[0:200]
+    return render(request, 'story/newest.html', {'stories': stories})
 
 @login_required
 def submit(request):

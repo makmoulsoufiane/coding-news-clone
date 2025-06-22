@@ -4,8 +4,8 @@
   <div class="container">
     <div class="columns">
       <div class="column is-12">
-        <h1 class="title">Welcome to Coding News</h1>
-        <p class="subtitle">Your daily dose of coding news and stories.</p>
+        <h1 class="title">newest page</h1>
+        
       </div>
     </div>
 
@@ -17,11 +17,10 @@
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>
-                  <a href="{{ story.url }}" target="_blank">{{ story.title }}</a>
-                  <p>{{ story.number_of_votes }} votes by {{ story.created_by.username }} {{ story.created_at|timesince }} ago </p>
+                  <a href="{ story.url }" target="_blank">{{story.title}}</a>
+                  <p>{{story.number_of_votes}} votes by {{ story.created_by.username}} {{ story.created_at | timesince }} ago </p>
                 </td>
               </tr>
-
             {% endfor %}
           </tbody>
       </div>
