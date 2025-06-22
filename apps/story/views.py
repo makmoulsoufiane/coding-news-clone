@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .forms import StoryForm
@@ -11,6 +11,16 @@ def frontpage(request):
 
 @login_required
 def submit(request):
+    if request.method == 'POST':
         form = StoryForm(request.POST)
 
-        return render(request, 'story/submit.html', {'form': form})
+        if form.is_valid():
+            story = form.save(commit=False)
+            story.created_by = request.user
+            story.save()
+
+            return redirect('frontpage')  # Redirect to the frontpage after submission
+    else:
+        form = StoryForm()
+
+    return render(request, 'story/submit.html', {'form': form})
