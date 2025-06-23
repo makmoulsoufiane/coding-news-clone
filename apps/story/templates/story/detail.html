@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="columns">
+      <div class="column is-12">
+        <h1 class="title">{{ story.title }}</h1>
+        <h2 class="subtitle">{{ story.number_of_votes}} votes </h2>
+
+
+        <strong>Created by: {{ story.created_by.username }} | {{ story.created_at|timesince }} ago</strong>
+        <br>
+        <strong>visit: <a href="{{ story.url }}" target="_blank">{{story.url}}</a></strong>
+
+        <hr>
+        {% if story.created_by != request.user %}<a href="{% url 'vote' story.id %}?next_page=story" class=button is-success>vote</a>{% endif %}
+
+
+
+
+
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column is-12">
+      </div>
+    </div>
+  </div>
+{% endblock %}

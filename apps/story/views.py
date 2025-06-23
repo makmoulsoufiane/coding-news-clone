@@ -12,6 +12,13 @@ def frontpage(request):
     return render(request, 'story/frontpage.html', {'stories': stories})
 
 
+
+
+def story(request, story_id):
+    story = get_object_or_404(Story, id=story_id)
+    return render(request, 'story/detail.html', {'story': story, 'story': story })
+
+
 def newest(request):
     stories = Story.objects.all()[0:200]
     return render(request, 'story/newest.html', {'stories': stories})
@@ -20,6 +27,15 @@ def newest(request):
 @login_required
 def vote(request, story_id):
     story = get_object_or_404(Story, id=story_id)
+
+
+    next_page = request.GET.get('next_page', '')
+    if next_page == 'story':
+        return redirect('story', story_id=story.id)
+
+    else:
+        next_page = 'frontpage'
+
 
     # Check if the user has already voted for this story
     if not Vote.objects.filter(story=story, created_by=request.user).exists():
