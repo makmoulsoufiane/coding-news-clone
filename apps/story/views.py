@@ -1,9 +1,9 @@
 import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from .forms import StoryForm
-from .models import Story
+from .models import Story, Vote
 # Create your views here.
 def frontpage(request):
     date_form = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -15,6 +15,19 @@ def frontpage(request):
 def newest(request):
     stories = Story.objects.all()[0:200]
     return render(request, 'story/newest.html', {'stories': stories})
+
+
+@login_required
+def vote(request, story_id):
+    story = get_object_or_404(Story, id=story_id)
+
+    # Check if the user has already voted for this story
+    if not Vote.objects.filter(story=story, created_by=request.user).exists():
+        vote = Vote(story=story, created_by=request.user)
+        vote.save()
+
+    return redirect('frontpage')
+
 
 @login_required
 def submit(request):
