@@ -32,3 +32,14 @@ class Vote(models.Model):
 
     def __str__(self):
         return f'Vote by {self.user.username} for {self.story.title}'
+
+class Comment(models.Model):
+    story = models.ForeignKey(Story, related_name='comments', on_delete=models.CASCADE)
+    body = models.TextField()
+    created_by = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+

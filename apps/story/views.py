@@ -2,8 +2,8 @@ import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .forms import StoryForm
-from .models import Story, Vote
+from .forms import StoryForm, CommentForm
+from .models import Story, Vote, Comment
 # Create your views here.
 def frontpage(request):
     date_form = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -15,8 +15,24 @@ def frontpage(request):
 
 
 def story(request, story_id):
-    story = get_object_or_404(Story, id=story_id)
-    return render(request, 'story/detail.html', {'story': story, 'story': story })
+    story = get_object_or_404(Story, pk=story_id)
+
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.story = story
+            comment.created_by = request.user
+            comment.save()
+
+            return redirect('story', story_id=story_id)
+    else:
+        form = CommentForm()
+
+    return render(request, 'story/detail.html', {'story': story, 'story': story ,'form': form})
+
 
 
 def newest(request):
@@ -24,14 +40,16 @@ def newest(request):
     return render(request, 'story/newest.html', {'stories': stories})
 
 
+
+
 @login_required
 def vote(request, story_id):
-    story = get_object_or_404(Story, id=story_id)
+    story = get_object_or_404(Story, pk=story_id)
 
 
     next_page = request.GET.get('next_page', '')
     if next_page == 'story':
-        return redirect('story', story_id=story.id)
+        return redirect('story', story_id=story_id)
 
     else:
         next_page = 'frontpage'
