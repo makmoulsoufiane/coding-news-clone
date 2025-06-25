@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.core', # Custom app for core functionality
     'apps.story', # Custom app for stories functionality
+    'apps.userprofile',# custom app for userpofile functionality
 ]
 
 MIDDLEWARE = [

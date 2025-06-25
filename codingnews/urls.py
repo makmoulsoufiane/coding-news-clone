@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views
 from apps.story.views import frontpage, submit,newest, vote,story
 from apps.core.views import signup
@@ -9,6 +9,7 @@ urlpatterns = [
     path('', frontpage, name='frontpage'),
     path('s/<int:story_id>/vote', vote, name='vote'),
     path('s/<int:story_id>/', story, name='story'),
+    path('u/', include ('apps.userprofile.urls')),
     path('newest/', newest, name='newest'),
     path('submit/', submit, name='submit'),
     path('signup/', signup, name='signup'),
